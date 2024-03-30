@@ -10,6 +10,7 @@
   "author": "kaufmoo",
   "license": "ISC",
   "dependencies": {
-    "mineflayer": "^4.20.0"
+    "mineflayer": "^4.20.0",
+    "socks-proxy-agent": "^8.0.2"
   }
 }

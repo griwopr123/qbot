@@ -1,19 +1,39 @@
-const mineflayer = require('mineflayer')
-const zahod = () => {
-    bot.chat('всем привет меня зовут никита мне 13 лет, я очень жду этот сервер потому что летом мне нечем занятся потому что у меня нету друзей единственный мой друг анатолий погиб на СВО 2 недели назад, мне хотелось бы получить проходку бесплатно потому что я живу в питере и все свои карманные деньги трачу на соль, мне очень понравилась задумка этого сервера и основной мод который будет на сервере, потому что повторюсь у меня никого нету из друзей и я смогу найти друзей среди нпс которые будут умирать за мои цели, я хочу устроить на сервере полномаштабное СВО и как свой любымий президент резать хохлов, мне кажется что это единственное чем стоит заниматся в этой жизни, надеюсь я найду на этом сервере хохлов.')
-}
-let a = 1;
-const bot = mineflayer.createBot({
-    host: 'localhost',
-    port: 25565,
-    username: 'Nikita' + a,
-})
-for (let connections = 30; connections > 0; connections = connections - 1) {
+const mineflayer = require('mineflayer');
+const SocksProxyAgent = require('socks-proxy-agent');
+const bots = [];
+const proxyList = [
+    'socks://proxy1.example.com:1080',
+    'socks://proxy2.example.com:1080',
+    // Добавь другие прокси-серверы
+];
+const proxyAgents = proxyList.map(proxy => new SocksProxyAgent(proxy));
+function createBotWithProxy(username, password) {
+    const selectedProxyAgent = proxyAgents[Math.floor(Math.random() * proxyAgents.length)];
+
     const bot = mineflayer.createBot({
+        username: username,
+        password: password,
         host: 'localhost',
         port: 25565,
-        username: 'Nikita' + a,
-    })
-    await 250
-    a++
+        // Передача агента прокси в опции "agent" бота
+        agent: selectedProxyAgent
+    });
+
+    // Добавьте обработчики событий и другую логику здесь, если необходимо
+
+    bot.on('login', () => {
+        console.log(`${bot.username} вошел на сервер`);
+    });
+
+    bot.on('kicked', (reason) => {
+        console.log(`${bot.username} был выгнан с сервера: ${reason}`);
+    });
+
+    bot.on('error', (err) => {
+        console.error('Произошла ошибка:', err);
+    });
 }
+
+// Создаем несколько ботов с прокси
+createBotWithProxy('bot1', 'password1');
+createBotWithProxy('bot2', 'password2');
