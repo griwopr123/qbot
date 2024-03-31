@@ -1,5 +1,6 @@
 const mineflayer = require('mineflayer');
 const bots = [];
+const { pathfinder } = require ('mineflayer-pathfinder');
 function createBot(username, password) {
 
     const bot = mineflayer.createBot({
@@ -8,8 +9,8 @@ function createBot(username, password) {
         host: 'localhost',
         port: 25565,
     });
-
-    // Добавьте обработчики событий и другую логику здесь, если необходимо
+    bot.loadPlugin(pathfinder);
+    bot.once('spawn', followPlayer)
 
     bot.on('login', () => {
         console.log(`${bot.username} вошел на сервер`);
@@ -23,6 +24,12 @@ function createBot(username, password) {
         console.error('Произошла ошибка:', err);
     });
 }
-
+function followPlayer (){
+  const playerC = bot.players['Kaufmoo']
+    if(!playerC){
+        return
+    }
+    const mcData = require('minecraft-data')(bot.version);
+}
 // Создаем несколько ботов с прокси
 createBot('bot', 'password');

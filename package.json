@@ -10,6 +10,7 @@
   "author": "kaufmoo",
   "license": "ISC",
   "dependencies": {
+    "minecraft-data": "^3.64.1",
     "mineflayer": "^4.20.0",
     "mineflayer-pathfinder": "^2.4.5",
     "socks-proxy-agent": "^8.0.2"
