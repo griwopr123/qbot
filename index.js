@@ -25,4 +25,4 @@ function createBot(username, password) {
 }
 
 // Создаем несколько ботов с прокси
-createBotWithProxy('bot', 'password');
+createBot('bot', 'password');
