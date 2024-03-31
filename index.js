@@ -1,14 +1,6 @@
 const mineflayer = require('mineflayer');
-const SocksProxyAgent = require('socks-proxy-agent');
 const bots = [];
-const proxyList = [
-    'socks://proxy1.example.com:1080',
-    'socks://proxy2.example.com:1080',
-    // Добавь другие прокси-серверы
-];
-const proxyAgents = proxyList.map(proxy => new SocksProxyAgent(proxy));
 function createBotWithProxy(username, password) {
-    const selectedProxyAgent = proxyAgents[Math.floor(Math.random() * proxyAgents.length)];
 
     const bot = mineflayer.createBot({
         username: username,
@@ -16,7 +8,7 @@ function createBotWithProxy(username, password) {
         host: 'localhost',
         port: 25565,
         // Передача агента прокси в опции "agent" бота
-        agent: selectedProxyAgent
+        agent: '50.175.212.79:80'
     });
 
     // Добавьте обработчики событий и другую логику здесь, если необходимо
