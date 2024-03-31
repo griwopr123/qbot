@@ -1,6 +1,7 @@
 const mineflayer = require('mineflayer');
 const bots = [];
-const { pathfinder } = require ('mineflayer-pathfinder');
+const { pathfinder, Movements , goals } = require ('mineflayer-pathfinder');
+const GoalFollow = goals.GoalFollow
 function createBot(username, password) {
 
     const bot = mineflayer.createBot({
@@ -11,25 +12,17 @@ function createBot(username, password) {
     });
     bot.loadPlugin(pathfinder);
     bot.once('spawn', followPlayer)
-
-    bot.on('login', () => {
-        console.log(`${bot.username} вошел на сервер`);
-    });
-
-    bot.on('kicked', (reason) => {
-        console.log(`${bot.username} был выгнан с сервера: ${reason}`);
-    });
-
-    bot.on('error', (err) => {
-        console.error('Произошла ошибка:', err);
-    });
 }
 function followPlayer (){
-  const playerC = bot.players['Kaufmoo']
+    const playerC = bot.players['Kaufmoo']
     if(!playerC){
+        bot.chat("не вижу")
         return
     }
     const mcData = require('minecraft-data')(bot.version);
+    const movements = new Movements(bot, mcData);
+   bot.pathfinder.setMovements(movements)
+    const goal = new GoalFollow(playerC.entity);
+   bot.pathfinder.setGoal(goal,true)
 }
-// Создаем несколько ботов с прокси
 createBot('bot', 'password');
