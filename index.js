@@ -21,8 +21,8 @@ function followPlayer (){
     }
     const mcData = require('minecraft-data')(bot.version);
     const movements = new Movements(bot, mcData);
-   bot.pathfinder.setMovements(movements)
+    bot.pathfinder.setMovements(movements)
     const goal = new GoalFollow(playerC.entity);
-   bot.pathfinder.setGoal(goal,true)
+    bot.pathfinder.setGoal(goal,true)
 }
 createBot('bot', 'password');
