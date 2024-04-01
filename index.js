@@ -2,7 +2,7 @@ const mineflayer = require('mineflayer');
 const { pathfinder, Movements, goals } = require('mineflayer-pathfinder');
 const GoalFollow = goals.GoalFollow;
 
-let bot = mineflayer.createBot({
+const bot = mineflayer.createBot({
     host: 'localhost',
     port: 50150,
     username: 'bot',
@@ -25,3 +25,9 @@ bot.on('chat', (username, message) => {
         bot.pathfinder.setGoal(null);
     }
 });
+bot.on('death', (username, message) => {
+    let words = ['ну хватит але', 'ну за что', 'ты чо ахуел сука', 'у меня папа админ извиняйся'];
+    let randomWord = words[Math.floor(Math.random() * words.length)];
+    bot.chat(randomWord);
+})
+
