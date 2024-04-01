@@ -1,28 +1,27 @@
 const mineflayer = require('mineflayer');
-const bots = [];
-const { pathfinder, Movements , goals } = require ('mineflayer-pathfinder');
-const GoalFollow = goals.GoalFollow
-function createBot(username, password) {
+const { pathfinder, Movements, goals } = require('mineflayer-pathfinder');
+const GoalFollow = goals.GoalFollow;
 
-    const bot = mineflayer.createBot({
-        username: username,
-        password: password,
-        host: 'localhost',
-        port: 25565,
-    });
-    bot.loadPlugin(pathfinder);
-    bot.once('spawn', followPlayer)
-}
-function followPlayer (){
-    const playerC = bot.players['Kaufmoo']
-    if(!playerC){
-        bot.chat("не вижу")
-        return
-    }
+let bot = mineflayer.createBot({
+    host: 'localhost',
+    port: 50150,
+    username: 'bot',
+});
+
+bot.loadPlugin(pathfinder);
+
+bot.once('spawn', () => {
     const mcData = require('minecraft-data')(bot.version);
-    const movements = new Movements(bot, mcData);
-    bot.pathfinder.setMovements(movements)
-    const goal = new GoalFollow(playerC.entity);
-    bot.pathfinder.setGoal(goal,true)
-}
-createBot('bot', 'password');
+    const defaultMove = new Movements(bot, mcData);
+    bot.pathfinder.setMovements(defaultMove);
+});
+
+bot.on('chat', (username, message) => {
+    if (username === bot.username) return;
+    let target = bot.players[username]?.entity;
+    if (message === 'follow' && target) {
+        bot.pathfinder.setGoal(new GoalFollow(target, 1), true);
+    } else if (message === 'stop') {
+        bot.pathfinder.setGoal(null);
+    }
+});
