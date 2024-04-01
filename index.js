@@ -40,7 +40,6 @@ bot.on('chat', (username, message) => {
         const p = target.position;
         bot.pathfinder.setGoal(new GoalNear(p.x, p.y, p.z, 1));
 
-        // Проверяем, достиг ли бот своей цели
         const checkIfReachedGoal = setInterval(() => {
             if (!bot.pathfinder.isMoving()) {
                 const distance = bot.entity.position.distanceTo(p);
@@ -60,5 +59,6 @@ bot.on('chat', (username, message) => {
     if(message === 'харе'){
         bot.chat('ладно(((')
         clearInterval(intervalId);
+        bot.setControlState('sneak', false);
     }
 });
