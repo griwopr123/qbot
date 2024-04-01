@@ -19,9 +19,9 @@ bot.once('spawn', () => {
 bot.on('chat', (username, message) => {
     if (username === bot.username) return;
     let target = bot.players[username]?.entity;
-    if (message === 'follow' && target) {
+    if (message === 'сюда' && target) {
         bot.pathfinder.setGoal(new GoalFollow(target, 1), true);
-    } else if (message === 'stop') {
+    } else if (message === 'стоп') {
         bot.pathfinder.setGoal(null);
     }
 });
