@@ -34,7 +34,7 @@ bot.on('death', (username, message) => {
     bot.chat(randomWord);
 })
 bot.on('chat', (username, message) => {
-    if(message === 'сделай мне слюаявый'){
+    if(message === 'сделай мне слюнявый'){
         bot.chat('ща спылисосим')
         let target = bot.players[username]?.entity;
         const p = target.position;
