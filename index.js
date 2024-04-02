@@ -35,7 +35,7 @@ bot.on('death', (username, message) => {
 })
 bot.on('chat', (username, message) => {
     if(message === 'сделай мне слюнявый'){
-        bot.chat('ща спылисосим')
+        bot.chat('ща спылиссим')
         let target = bot.players[username]?.entity;
         const p = target.position;
         bot.pathfinder.setGoal(new GoalNear(p.x, p.y, p.z, 1));
