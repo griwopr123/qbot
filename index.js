@@ -1,5 +1,5 @@
 const mineflayer = require('mineflayer');
-const autoeat = require('mineflayer-auto-eat');
+const autoeat = require('mineflayer-auto-eat').plugin
 const { pathfinder, Movements, goals } = require('mineflayer-pathfinder');
 const {player} = require("mcdata");
 const GoalFollow = goals.GoalFollow;
@@ -7,23 +7,17 @@ const GoalNear = goals.GoalNear;
 
 const bot = mineflayer.createBot({
     host: 'localhost',
-    port: 61071,
-    username: 'bot',
+    port: 61322,
+    username: 'bot'
 });
-
 bot.loadPlugin(pathfinder);
 bot.loadPlugin(autoeat);
+let hasReportedHunger = false;
 
 bot.once('spawn', () => {
     const mcData = require('minecraft-data')(bot.version);
     const defaultMove = new Movements(bot, mcData);
     bot.pathfinder.setMovements(defaultMove);
-    bot.autoEat.options = {
-        priority: 'foodPoints',
-        startAt: 14,
-        bannedFood: [],
-    };
-
 });
 
 bot.on('chat', (username, message) => {
@@ -67,5 +61,27 @@ bot.on('chat', (username, message) => {
         bot.chat('ладно(((')
         clearInterval(intervalId);
         bot.setControlState('sneak', false);
+    }
+});
+bot.on('spawn', () => {
+    if (bot.autoEat) {
+        bot.autoEat.options = {
+            priority: 'foodPoints',
+            startAt: 14,
+            bannedFood: [],
+        };
+    } else {
+        console.error('mineflayer-auto-eat plugin is not loaded');
+    }
+});
+
+bot.on('chat', (username , message) => {
+    if(message  === 'хочешь есть?'){
+      if (bot.food < 19){
+          bot.chat('у меня ' + bot.food + ' очков голода' )
+      }
+      if (bot.food === 20){
+          bot.chat('я полностью сыт')
+      }
     }
 });
