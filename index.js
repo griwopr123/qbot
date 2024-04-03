@@ -1,4 +1,5 @@
 const mineflayer = require('mineflayer');
+const autoeat = require('mineflayer-auto-eat');
 const { pathfinder, Movements, goals } = require('mineflayer-pathfinder');
 const {player} = require("mcdata");
 const GoalFollow = goals.GoalFollow;
@@ -6,16 +7,22 @@ const GoalNear = goals.GoalNear;
 
 const bot = mineflayer.createBot({
     host: 'localhost',
-    port: 52955,
+    port: 61071,
     username: 'bot',
 });
 
 bot.loadPlugin(pathfinder);
+bot.loadPlugin(autoeat);
 
 bot.once('spawn', () => {
     const mcData = require('minecraft-data')(bot.version);
     const defaultMove = new Movements(bot, mcData);
     bot.pathfinder.setMovements(defaultMove);
+    bot.autoEat.options = {
+        priority: 'foodPoints',
+        startAt: 14,
+        bannedFood: [],
+    };
 
 });
 
