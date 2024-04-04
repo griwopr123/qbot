@@ -8,7 +8,7 @@ const GoalNear = goals.GoalNear;
 
 const bot = mineflayer.createBot({
     host: 'localhost',
-    port: 61644,
+    port: 64306,
     username: 'nikita'
 });
 bot.loadPlugin(pathfinder);
@@ -90,14 +90,23 @@ bot.on('chat', (username, message) => {
     if (username === bot.username) return;
     if (message === 'построй здесь') {
         let player = bot.players[username];
-        if (!player) {
-            bot.chat("Я не вижу вас!");
-            return;
-        }
-        let referencePoint = player.entity.position.offset(0, -1, 0);
-        buildHouse(referencePoint);
+        let target = bot.players[username]?.entity;
+        const p = target.position;
+        bot.pathfinder.setGoal(new GoalNear(p.x, p.y, p.z, 1), true);
+        const checkIfStopped = setInterval(() => {
+            if (!bot.pathfinder.isMoving()) {
+                clearInterval(checkIfStopped);
+                if (!player) {
+                    bot.chat("Я не вижу вас!");
+                    return;
+                }
+                let referencePoint = player.entity.position.offset(0, -1, 0);
+                buildHouse(referencePoint);
+            }
+        }, 1000);
     }
 });
+
 
 function buildHouse(referencePoint) {
     let blocksToPlace = [
