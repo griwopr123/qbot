@@ -1,14 +1,15 @@
 const mineflayer = require('mineflayer');
 const autoeat = require('mineflayer-auto-eat').plugin
 const { pathfinder, Movements, goals } = require('mineflayer-pathfinder');
+const Vec3 = require('vec3').Vec3;
 const {player} = require("mcdata");
 const GoalFollow = goals.GoalFollow;
 const GoalNear = goals.GoalNear;
 
 const bot = mineflayer.createBot({
     host: 'localhost',
-    port: 61322,
-    username: 'bot'
+    port: 61644,
+    username: 'nikita'
 });
 bot.loadPlugin(pathfinder);
 bot.loadPlugin(autoeat);
@@ -83,5 +84,17 @@ bot.on('chat', (username , message) => {
       if (bot.food === 20){
           bot.chat('я полностью сыт')
       }
+    }
+});
+bot.on('chat', (username, message) => {
+    if (username === bot.username) return;
+    if (message === 'построй здесь') {
+        let player = bot.players[username];
+        if (!player) {
+            bot.chat("Я не вижу где");
+            return;
+        }
+        let referencePoint = player.entity.position.offset(0, -1, 0);
+        buildHouse(referencePoint);
     }
 });
