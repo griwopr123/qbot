@@ -158,12 +158,20 @@ async function buildHouse(referencePoint) {
                 await bot.dig(blockToPlace);
             }
             if (bot.canSeeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)))) {
-                await bot.lookAt(blockPosition, true);
-                await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
+                try {
+                    await bot.lookAt(blockPosition, true);
+                    await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
+                } catch (error) {
+                    bot.chat(`Не могу поставить блок на ${blockPosition}`);
+                }
             } else {
                 bot.setControlState('jump', true);
-                await bot.lookAt(blockPosition, true);
-                await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
+                try {
+                    await bot.lookAt(blockPosition, true);
+                    await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
+                } catch (error) {
+                    bot.chat(`Не могу поставить блок на ${blockPosition}`);
+                }
                 bot.setControlState('jump', false);
             }
         }
