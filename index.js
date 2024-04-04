@@ -103,14 +103,18 @@ bot.on('chat', (username, message) => {
                 let referencePoint = player.entity.position.offset(0, -1, 0);
                 buildHouse(referencePoint);
             }
-        }, 1000);
+        }, 250);
     }
 });
 
 
-function buildHouse(referencePoint) {
+async function buildHouse(referencePoint) {
     let blocksToPlace = [
-        [referencePoint.x, referencePoint.y - 1, referencePoint.z],
+
+
+
+
+        [referencePoint.x, referencePoint.y , referencePoint.z],
         [referencePoint.x + 2, referencePoint.y, referencePoint.z],
         [referencePoint.x + 2, referencePoint.y, referencePoint.z - 1],
         [referencePoint.x + 2, referencePoint.y, referencePoint.z - 2],
@@ -148,7 +152,20 @@ function buildHouse(referencePoint) {
 
     let placeBlocks = async () => {
         for (let block of blocksToPlace) {
-            await bot.placeBlock(bot.blockAt(new Vec3(...block)), new Vec3(0, 1, 0));
+            let blockPosition = new Vec3(...block);
+            let blockToPlace = bot.blockAt(blockPosition);
+            if (blockToPlace && blockToPlace.type !== 0) {
+                await bot.dig(blockToPlace);
+            }
+            if (bot.canSeeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)))) {
+                await bot.lookAt(blockPosition, true);
+                await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
+            } else {
+                bot.setControlState('jump', true);
+                await bot.lookAt(blockPosition, true);
+                await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
+                bot.setControlState('jump', false);
+            }
         }
     };
 
