@@ -91,10 +91,57 @@ bot.on('chat', (username, message) => {
     if (message === 'построй здесь') {
         let player = bot.players[username];
         if (!player) {
-            bot.chat("Я не вижу где");
+            bot.chat("Я не вижу вас!");
             return;
         }
         let referencePoint = player.entity.position.offset(0, -1, 0);
         buildHouse(referencePoint);
     }
 });
+
+function buildHouse(referencePoint) {
+    let blocksToPlace = [
+        [referencePoint.x, referencePoint.y - 1, referencePoint.z],
+        [referencePoint.x + 2, referencePoint.y, referencePoint.z],
+        [referencePoint.x + 2, referencePoint.y, referencePoint.z - 1],
+        [referencePoint.x + 2, referencePoint.y, referencePoint.z - 2],
+        [referencePoint.x + 2, referencePoint.y, referencePoint.z + 1],
+        [referencePoint.x + 2, referencePoint.y, referencePoint.z + 2],
+        [referencePoint.x - 2, referencePoint.y, referencePoint.z],
+        [referencePoint.x - 2, referencePoint.y, referencePoint.z - 1],
+        [referencePoint.x - 2, referencePoint.y, referencePoint.z - 2],
+        [referencePoint.x - 2, referencePoint.y, referencePoint.z + 1],
+        [referencePoint.x - 2, referencePoint.y, referencePoint.z + 2],
+        [referencePoint.x + 1, referencePoint.y, referencePoint.z + 2],
+        [referencePoint.x - 1, referencePoint.y, referencePoint.z + 2],
+        [referencePoint.x, referencePoint.y, referencePoint.z - 2],
+        [referencePoint.x + 1, referencePoint.y, referencePoint.z - 2],
+        [referencePoint.x - 1, referencePoint.y, referencePoint.z - 2],
+        [referencePoint.x + 2, referencePoint.y + 1, referencePoint.z],
+        [referencePoint.x + 2, referencePoint.y + 1, referencePoint.z - 1],
+        [referencePoint.x + 2, referencePoint.y + 1, referencePoint.z - 2],
+        [referencePoint.x + 2, referencePoint.y + 1, referencePoint.z + 1],
+        [referencePoint.x + 2, referencePoint.y + 1, referencePoint.z + 2],
+        [referencePoint.x - 2, referencePoint.y + 1, referencePoint.z],
+        [referencePoint.x - 2, referencePoint.y + 1, referencePoint.z - 1],
+        [referencePoint.x - 2, referencePoint.y + 1, referencePoint.z - 2],
+        [referencePoint.x - 2, referencePoint.y + 1, referencePoint.z + 1],
+        [referencePoint.x - 2, referencePoint.y + 1, referencePoint.z + 2],
+        [referencePoint.x + 1, referencePoint.y + 1, referencePoint.z + 2],
+        [referencePoint.x - 1, referencePoint.y + 1, referencePoint.z + 2],
+        [referencePoint.x, referencePoint.y + 1, referencePoint.z - 2],
+        [referencePoint.x + 1, referencePoint.y + 1, referencePoint.z - 2],
+        [referencePoint.x - 1, referencePoint.y + 1, referencePoint.z - 2],
+        [referencePoint.x - 2, referencePoint.y + 1, referencePoint.z],
+        [referencePoint.x + 2, referencePoint.y + 1, referencePoint.z],
+        // Добавьте остальные блоки сюда
+    ];
+
+    let placeBlocks = async () => {
+        for (let block of blocksToPlace) {
+            await bot.placeBlock(bot.blockAt(new Vec3(...block)), new Vec3(0, 1, 0));
+        }
+    };
+
+    placeBlocks().then(() => bot.chat('Дом построен!'));
+}
