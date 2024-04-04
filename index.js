@@ -100,7 +100,7 @@ bot.on('chat', (username, message) => {
                     bot.chat("Я не вижу вас!");
                     return;
                 }
-                let referencePoint = player.entity.position.offset(0, -1, 0);
+                let referencePoint = player.entity.position.offset(0, 0, 0);
                 buildHouse(referencePoint);
             }
         }, 250);
@@ -110,10 +110,14 @@ bot.on('chat', (username, message) => {
 
 async function buildHouse(referencePoint) {
     let blocksToPlace = [
-
-
-
-
+        [referencePoint.x + 1, referencePoint.y, referencePoint.z + 1],
+        [referencePoint.x + 1, referencePoint.y, referencePoint.z],
+        [referencePoint.x + 1, referencePoint.y, referencePoint.z - 1],
+        [referencePoint.x, referencePoint.y, referencePoint.z + 1],
+        [referencePoint.x, referencePoint.y, referencePoint.z - 1],
+        [referencePoint.x - 1, referencePoint.y, referencePoint.z + 1],
+        [referencePoint.x - 1, referencePoint.y, referencePoint.z],
+        [referencePoint.x - 1, referencePoint.y, referencePoint.z - 1],
         [referencePoint.x, referencePoint.y , referencePoint.z],
         [referencePoint.x + 2, referencePoint.y, referencePoint.z],
         [referencePoint.x + 2, referencePoint.y, referencePoint.z - 1],
@@ -157,23 +161,24 @@ async function buildHouse(referencePoint) {
             if (blockToPlace && blockToPlace.type !== 0) {
                 await bot.dig(blockToPlace);
             }
-            if (bot.canSeeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)))) {
+            bot.setControlState('jump', true);
+            let success = false;
+            while (!success) {
                 try {
-                    await bot.lookAt(blockPosition, true);
-                    await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
+                    if (bot.canSeeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)))) {
+                        await bot.lookAt(blockPosition, true);
+                        await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
+                        success = true;
+                    } else {
+                        await bot.lookAt(blockPosition, true);
+                        await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
+                        success = true;
+                    }
                 } catch (error) {
-                    bot.chat(`Не могу поставить блок на ${blockPosition}`);
+                    bot.chat(`Не могу поставить блок на ${blockPosition}, попробую снова...`);
                 }
-            } else {
-                bot.setControlState('jump', true);
-                try {
-                    await bot.lookAt(blockPosition, true);
-                    await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
-                } catch (error) {
-                    bot.chat(`Не могу поставить блок на ${blockPosition}`);
-                }
-                bot.setControlState('jump', false);
             }
+            bot.setControlState('jump', false);
         }
     };
 
