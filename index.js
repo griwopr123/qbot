@@ -8,7 +8,7 @@ const GoalNear = goals.GoalNear;
 
 const bot = mineflayer.createBot({
     host: 'localhost',
-    port: 64306,
+    port: 52967,
     username: 'nikita'
 });
 bot.loadPlugin(pathfinder);
