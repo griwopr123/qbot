@@ -75,7 +75,10 @@ bot.on('spawn', () => {
         console.error('mineflayer-auto-eat plugin is not loaded');
     }
 });
+bot.on('chat', (username , message) => {
 
+
+});
 bot.on('chat', (username , message) => {
     if(message  === 'хочешь есть?'){
       if (bot.food < 19){
@@ -93,7 +96,7 @@ bot.on('chat', (username, message) => {
         let target = bot.players[username]?.entity;
         const p = target.position;
         bot.pathfinder.setGoal(new GoalNear(p.x, p.y, p.z, 1), true);
-        const checkIfStopped = setInterval(() => {
+        const checkIfStopped = setInterval(async () => {
             if (!bot.pathfinder.isMoving()) {
                 clearInterval(checkIfStopped);
                 if (!player) {
@@ -101,7 +104,8 @@ bot.on('chat', (username, message) => {
                     return;
                 }
                 let referencePoint = player.entity.position.offset(0, 0, 0);
-                buildHouse(referencePoint);
+                await buildHouse(referencePoint);
+                bot.pathfinder.setGoal(null); // Останавливаем бота после постройки
             }
         }, 250);
     }
@@ -110,50 +114,28 @@ bot.on('chat', (username, message) => {
 
 async function buildHouse(referencePoint) {
     let blocksToPlace = [
-        [referencePoint.x + 1, referencePoint.y, referencePoint.z + 1],
         [referencePoint.x + 1, referencePoint.y, referencePoint.z],
-        [referencePoint.x + 1, referencePoint.y, referencePoint.z - 1],
-        [referencePoint.x, referencePoint.y, referencePoint.z + 1],
-        [referencePoint.x, referencePoint.y, referencePoint.z - 1],
-        [referencePoint.x - 1, referencePoint.y, referencePoint.z + 1],
-        [referencePoint.x - 1, referencePoint.y, referencePoint.z],
-        [referencePoint.x - 1, referencePoint.y, referencePoint.z - 1],
-        [referencePoint.x, referencePoint.y , referencePoint.z],
         [referencePoint.x + 2, referencePoint.y, referencePoint.z],
-        [referencePoint.x + 2, referencePoint.y, referencePoint.z - 1],
-        [referencePoint.x + 2, referencePoint.y, referencePoint.z - 2],
-        [referencePoint.x + 2, referencePoint.y, referencePoint.z + 1],
-        [referencePoint.x + 2, referencePoint.y, referencePoint.z + 2],
+        [referencePoint.x + 3, referencePoint.y, referencePoint.z],
+        [referencePoint.x + 3, referencePoint.y, referencePoint.z + 1],
+        [referencePoint.x + 3, referencePoint.y, referencePoint.z + 2],
+        [referencePoint.x - 1, referencePoint.y, referencePoint.z],
         [referencePoint.x - 2, referencePoint.y, referencePoint.z],
-        [referencePoint.x - 2, referencePoint.y, referencePoint.z - 1],
-        [referencePoint.x - 2, referencePoint.y, referencePoint.z - 2],
-        [referencePoint.x - 2, referencePoint.y, referencePoint.z + 1],
-        [referencePoint.x - 2, referencePoint.y, referencePoint.z + 2],
-        [referencePoint.x + 1, referencePoint.y, referencePoint.z + 2],
-        [referencePoint.x - 1, referencePoint.y, referencePoint.z + 2],
+        [referencePoint.x - 3, referencePoint.y, referencePoint.z],
+        [referencePoint.x - 3, referencePoint.y, referencePoint.z - 1],
+        [referencePoint.x - 3, referencePoint.y, referencePoint.z - 2],
+        [referencePoint.x, referencePoint.y, referencePoint.z + 1],
+        [referencePoint.x, referencePoint.y, referencePoint.z + 2],
+        [referencePoint.x, referencePoint.y, referencePoint.z + 3],
+        [referencePoint.x - 1, referencePoint.y, referencePoint.z + 3],
+        [referencePoint.x - 2, referencePoint.y, referencePoint.z + 3],
+        [referencePoint.x, referencePoint.y, referencePoint.z - 1],
         [referencePoint.x, referencePoint.y, referencePoint.z - 2],
-        [referencePoint.x + 1, referencePoint.y, referencePoint.z - 2],
-        [referencePoint.x - 1, referencePoint.y, referencePoint.z - 2],
-        [referencePoint.x + 2, referencePoint.y + 1, referencePoint.z],
-        [referencePoint.x + 2, referencePoint.y + 1, referencePoint.z - 1],
-        [referencePoint.x + 2, referencePoint.y + 1, referencePoint.z - 2],
-        [referencePoint.x + 2, referencePoint.y + 1, referencePoint.z + 1],
-        [referencePoint.x + 2, referencePoint.y + 1, referencePoint.z + 2],
-        [referencePoint.x - 2, referencePoint.y + 1, referencePoint.z],
-        [referencePoint.x - 2, referencePoint.y + 1, referencePoint.z - 1],
-        [referencePoint.x - 2, referencePoint.y + 1, referencePoint.z - 2],
-        [referencePoint.x - 2, referencePoint.y + 1, referencePoint.z + 1],
-        [referencePoint.x - 2, referencePoint.y + 1, referencePoint.z + 2],
-        [referencePoint.x + 1, referencePoint.y + 1, referencePoint.z + 2],
-        [referencePoint.x - 1, referencePoint.y + 1, referencePoint.z + 2],
-        [referencePoint.x, referencePoint.y + 1, referencePoint.z - 2],
-        [referencePoint.x + 1, referencePoint.y + 1, referencePoint.z - 2],
-        [referencePoint.x - 1, referencePoint.y + 1, referencePoint.z - 2],
-        [referencePoint.x - 2, referencePoint.y + 1, referencePoint.z],
-        [referencePoint.x + 2, referencePoint.y + 1, referencePoint.z],
-        // Добавьте остальные блоки сюда
+        [referencePoint.x, referencePoint.y, referencePoint.z - 3],
+        [referencePoint.x + 1, referencePoint.y, referencePoint.z - 3],
+        [referencePoint.x + 2, referencePoint.y, referencePoint.z - 3],
+        // Ваши старые координаты здесь
     ];
-
     let placeBlocks = async () => {
         for (let block of blocksToPlace) {
             let blockPosition = new Vec3(...block);
@@ -184,3 +166,5 @@ async function buildHouse(referencePoint) {
 
     placeBlocks().then(() => bot.chat('Дом построен!'));
 }
+
+
