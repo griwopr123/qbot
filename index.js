@@ -153,6 +153,18 @@ async function buildHouse(referencePoint) {
                     if (nextBlock && nextBlock.type !== 0) {
                         // Если есть, то сначала уничтожаем его
                         await bot.dig(nextBlock);
+                        // Проверяем, что блок был успешно уничтожен
+                        nextBlock = bot.blockAt(nextPosition);
+                        if (nextBlock && nextBlock.type !== 0) {
+                            continue; // Если блок все еще там, пропускаем этот цикл
+                        }
+                    }
+                    // Проверяем, не стоит ли бот на месте, где должен быть поставлен блок
+                    if (bot.entity.position.distanceTo(blockPosition) < 1) {
+                        // Если стоит, то отступаем на один блок назад
+                        bot.setControlState('back', true);
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        bot.setControlState('back', false);
                     }
                     // Перемещаем бота к позиции рядом с блоком
                     bot.pathfinder.setGoal(new GoalNear(blockPosition.x, blockPosition.y, blockPosition.z, 2));
@@ -171,6 +183,7 @@ async function buildHouse(referencePoint) {
                     }
                 } catch (error) {
                     bot.chat(`Не могу поставить блок на ${blockPosition}, попробую снова...`);
+                    await new Promise(resolve => setTimeout(resolve, 500));
                 }
             }
             bot.setControlState('jump', false);
@@ -180,4 +193,8 @@ async function buildHouse(referencePoint) {
     placeBlocks().then(() => bot.chat('Дом построен!'));
 }
 
-
+bot.on('chat', (username, message) => {
+   if(message === 'кто лучшая женщина?'){
+       bot.chat('очевидно торамана')
+   }
+});
