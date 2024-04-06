@@ -163,7 +163,9 @@ async function buildHouse(referencePoint) {
                     if (bot.entity.position.distanceTo(blockPosition) < 1) {
                         // Если стоит, то отступаем на один блок назад
                         bot.setControlState('back', true);
+                        bot.setControlState('jump', true);
                         await new Promise(resolve => setTimeout(resolve, 1000));
+                        bot.setControlState('jump', false);
                         bot.setControlState('back', false);
                     }
                     // Перемещаем бота к позиции рядом с блоком
@@ -197,4 +199,9 @@ bot.on('chat', (username, message) => {
    if(message === 'кто лучшая женщина?'){
        bot.chat('очевидно торамана')
    }
+});
+bot.on('chat', (username, message) => {
+    if(message === 'путин хуйло?'){
+        bot.chat('конечно')
+    }
 });
