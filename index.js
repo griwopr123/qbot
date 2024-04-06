@@ -147,6 +147,19 @@ async function buildHouse(referencePoint) {
             let success = false;
             while (!success) {
                 try {
+                    // Проверяем, есть ли блок на месте, куда бот собирается идти
+                    let nextPosition = new Vec3(blockPosition.x, blockPosition.y, blockPosition.z);
+                    let nextBlock = bot.blockAt(nextPosition);
+                    if (nextBlock && nextBlock.type !== 0) {
+                        // Если есть, то сначала уничтожаем его
+                        await bot.dig(nextBlock);
+                    }
+                    // Перемещаем бота к позиции рядом с блоком
+                    bot.pathfinder.setGoal(new GoalNear(blockPosition.x, blockPosition.y, blockPosition.z, 2));
+                    // Ждем, пока бот дойдет до позиции
+                    while (bot.pathfinder.isMoving()) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
                     if (bot.canSeeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)))) {
                         await bot.lookAt(blockPosition, true);
                         await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
