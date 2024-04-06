@@ -185,7 +185,6 @@ async function buildHouse(referencePoint) {
                     }
                 } catch (error) {
                     bot.chat(`Не могу поставить блок на ${blockPosition}, попробую снова...`);
-                    await new Promise(resolve => setTimeout(resolve, 500));
                 }
             }
             bot.setControlState('jump', false);
