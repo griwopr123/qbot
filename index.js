@@ -1,5 +1,7 @@
 const mineflayer = require('mineflayer');
 const autoeat = require('mineflayer-auto-eat').plugin
+const tool = require('mineflayer-tool').plugin
+const collectBlock = require('mineflayer-collectblock').plugin;
 const { pathfinder, Movements, goals } = require('mineflayer-pathfinder');
 const Vec3 = require('vec3').Vec3;
 const {player} = require("mcdata");
