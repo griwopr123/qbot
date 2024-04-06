@@ -147,16 +147,19 @@ async function buildHouse(referencePoint) {
             let success = false;
             while (!success) {
                 try {
-                    // Добавляем логику перемещения бота к блоку
+                    // Устанавливаем цель для бота
                     bot.pathfinder.setGoal(new GoalNear(blockPosition.x, blockPosition.y, blockPosition.z, 1));
-                    if (bot.canSeeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)))) {
-                        await bot.lookAt(blockPosition, true);
-                        await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
-                        success = true;
-                    } else {
-                        await bot.lookAt(blockPosition, true);
-                        await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
-                        success = true;
+                    // Проверяем, достаточно ли близко бот к блоку
+                    if (bot.entity.position.distanceTo(blockPosition) <= 1) {
+                        if (bot.canSeeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)))) {
+                            await bot.lookAt(blockPosition, true);
+                            await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
+                            success = true;
+                        } else {
+                            await bot.lookAt(blockPosition, true);
+                            await bot.placeBlock(bot.blockAt(blockPosition.offset(0, -1, 0)), new Vec3(0, 1, 0));
+                            success = true;
+                        }
                     }
                 } catch (error) {
                     bot.chat(`Не могу поставить блок на ${blockPosition}, попробую снова...`);
@@ -164,7 +167,7 @@ async function buildHouse(referencePoint) {
             }
             bot.setControlState('jump', false);
         }
-
+        placeBlocks().then(() => bot.chat('Дом построен!'));
     };
 }
 
