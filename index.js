@@ -151,26 +151,20 @@ async function buildHouse(referencePoint) {
                     let nextPosition = new Vec3(blockPosition.x, blockPosition.y, blockPosition.z);
                     let nextBlock = bot.blockAt(nextPosition);
                     if (nextBlock && nextBlock.type !== 0) {
-                        // Если есть, то сначала уничтожаем его
                         await bot.dig(nextBlock);
-                        // Проверяем, что блок был успешно уничтожен
                         nextBlock = bot.blockAt(nextPosition);
                         if (nextBlock && nextBlock.type !== 0) {
-                            continue; // Если блок все еще там, пропускаем этот цикл
+                            continue;
                         }
                     }
-                    // Проверяем, не стоит ли бот на месте, где должен быть поставлен блок
                     if (bot.entity.position.distanceTo(blockPosition) < 1) {
-                        // Если стоит, то отступаем на один блок назад
                         bot.setControlState('back', true);
                         bot.setControlState('jump', true);
                         await new Promise(resolve => setTimeout(resolve, 1000));
                         bot.setControlState('jump', false);
                         bot.setControlState('back', false);
                     }
-                    // Перемещаем бота к позиции рядом с блоком
                     bot.pathfinder.setGoal(new GoalNear(blockPosition.x, blockPosition.y, blockPosition.z, 2));
-                    // Ждем, пока бот дойдет до позиции
                     while (bot.pathfinder.isMoving()) {
                         await new Promise(resolve => setTimeout(resolve, 1000));
                     }
