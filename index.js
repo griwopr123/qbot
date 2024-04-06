@@ -203,44 +203,5 @@ bot.on('chat', (username, message) => {
     }
 });
 bot.on('chat', (username, message,) => {
-    const mcData = require('minecraft-data')(bot.version);
-    const defaultMove = new Movements(bot, mcData);
-    bot.pathfinder.setMovements(defaultMove);
- if(message === 'добудь дерева' ){
-     const treeBlock = bot.findBlock({
-         matching: mcData.blocksByName.oak_log.id,
-         maxDistance: 64,
-     });
-     if (!treeBlock) {
-         bot.chat('Я не могу найти ни одного дерева поблизости');
-         return;
-     }
-     bot.pathfinder.setGoal(new GoalNear(treeBlock.position.x, treeBlock.position.y, treeBlock.position.z, 1));
-     bot.once('goal_reached', () => {
-         digTree(treeBlock);
-     });
-     function digTree(block) {
-         if (!block) {
-             bot.chat('Я закончил добывать дерево!');
-             return;
-         }
 
-         bot.dig(block, err => {
-             if (err) {
-                 bot.chat('Ошибка при добыче дерева: ' + err);
-                 return;
-             }
-
-             // Найти следующий блок дерева над текущим блоком
-             const nextBlock = bot.blockAt(block.position.offset(0, 1, 0));
-
-             // Если следующий блок - это также блок дерева, продолжить добычу
-             if (nextBlock && nextBlock.type === block.type) {
-                 digTree(nextBlock);
-             } else {
-                 bot.chat('Я закончил добывать дерево!');
-             }
-         });
-     }
- }
 })
