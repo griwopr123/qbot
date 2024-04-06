@@ -202,6 +202,51 @@ bot.on('chat', (username, message) => {
         bot.chat('конечно')
     }
 });
-bot.on('chat', (username, message,) => {
+bot.on('chat', (username, message) => {
+    if (message === 'добудь дерева') {
+        chopWood();
+    }
+});
 
-})
+function chopWood() {
+    const treeBlock = bot.findBlock({
+        matching: block => bot.mcData.blocksArray.map(block => block.id).includes(block.type),
+        maxDistance: 64,
+    });
+
+    if (treeBlock) {
+        bot.collectBlock.collect(treeBlock, err => {
+            if (err) console.error(err);
+            else depositWood();
+        });
+    } else {
+        console.log('не нашел дерево');
+    }
+}
+
+function depositWood() {
+    const chestBlock = bot.findBlock({
+        matching: bot.mcData.blocksByName.chest.id,
+        maxDistance: 16,
+    });
+
+    if (chestBlock) {
+        const chest = bot.openChest(chestBlock);
+
+        chest.on('open', () => {
+            const woodItem = bot.inventory.items().find(item => item.name.includes('log'));
+
+            if (woodItem) {
+                chest.deposit(woodItem.type, null, woodItem.count, err => {
+                    if (err) console.error(err);
+                    else chopWood();
+                });
+            } else {
+                console.log('No wood to deposit');
+                chopWood();
+            }
+        });
+    } else {
+        console.log('нет сундука рядом');
+    }
+}
