@@ -1,7 +1,6 @@
 const mineflayer = require('mineflayer');
 const autoeat = require('mineflayer-auto-eat').plugin
 const toolPlugin = require('mineflayer-tool').plugin
-const collectBlock = require('mineflayer-collectblock').plugin;
 const { pathfinder, Movements, goals } = require('mineflayer-pathfinder');
 const Vec3 = require('vec3').Vec3;
 const {player} = require("mcdata");
@@ -10,12 +9,11 @@ const GoalNear = goals.GoalNear;
 
 const bot = mineflayer.createBot({
     host: 'localhost',
-    port: 52540,
+    port: 55111,
     username: 'nikita'
 });
 bot.loadPlugin(pathfinder);
 bot.loadPlugin(autoeat);
-bot.loadPlugin(collectBlock);
 bot.loadPlugin(toolPlugin);
 let hasReportedHunger = false;
 let mcData;
@@ -199,18 +197,5 @@ bot.on('chat', (username, message) => {
         bot.chat('конечно')
     }
 });
-bot.on('chat', (username, message) => {
-    if (username === bot.username) return;
-    const targetBlockType = bot.findBlock({
-        matching: ['minecraft:oak_log', 'minecraft:spruce_log', 'minecraft:birch_log', 'minecraft:jungle_log', 'minecraft:acacia_log', 'minecraft:dark_oak_log'].map(name => mcData.blocksByName[name].id),
-        maxDistance: 64,
-    });
-    if (targetBlockType) {
-        bot.collectBlock.collect(targetBlockType, err => {
-            if (err) bot.chat(`Не удалось собрать блок: ${err.message}`);
-            else bot.chat('Блок успешно собран!');
-        });
-    } else {
-        bot.chat('Блоки древесины поблизости не найдены');
-    }
-});
+let isCollecting = false;
+let hasSentMessage = false;
