@@ -199,6 +199,18 @@ bot.on('chat', (username, message) => {
         bot.chat('конечно')
     }
 });
-bot.on('chat', async (username, message) => {
-
+bot.on('chat', (username, message) => {
+    if (username === bot.username) return;
+    const targetBlockType = bot.findBlock({
+        matching: ['minecraft:oak_log', 'minecraft:spruce_log', 'minecraft:birch_log', 'minecraft:jungle_log', 'minecraft:acacia_log', 'minecraft:dark_oak_log'].map(name => mcData.blocksByName[name].id),
+        maxDistance: 64,
+    });
+    if (targetBlockType) {
+        bot.collectBlock.collect(targetBlockType, err => {
+            if (err) bot.chat(`Не удалось собрать блок: ${err.message}`);
+            else bot.chat('Блок успешно собран!');
+        });
+    } else {
+        bot.chat('Блоки древесины поблизости не найдены');
+    }
 });
