@@ -133,7 +133,6 @@ async function buildHouse(referencePoint) {
         [referencePoint.x, referencePoint.y, referencePoint.z - 3],
         [referencePoint.x + 1, referencePoint.y, referencePoint.z - 3],
         [referencePoint.x + 2, referencePoint.y, referencePoint.z - 3],
-        // Ваши старые координаты здесь
     ];
     let placeBlocks = async () => {
         for (let block of blocksToPlace) {
