@@ -1,5 +1,6 @@
 const mineflayer = require('mineflayer');
 const minecraftData = require('minecraft-data');
+const collectBlock = require('mineflayer-collectblock').plugin;
 
 const bot = mineflayer.createBot({
     host: 'localhost',
@@ -17,5 +18,10 @@ bot.once('spawn', () => {
 bot.on('chat', (username, message) => {
     if (message === 'займись сельским хозяйством') {
         bot.chat('Ща');
+
+
+
+
+
     }
 });
