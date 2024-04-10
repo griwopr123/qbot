@@ -25,7 +25,7 @@ async function collectoak(amount) {
 
             // Проверка, достигнуто ли желаемое количество
             if (collectedWood >= amount) {
-                console.log(`✅ Добыто ${amount} блоков дерева!`);
+                console.log(`Добыто ${amount} блоков дерева!`);
                 return; // Останавливаем функцию
             }
 
@@ -46,7 +46,7 @@ bot.on("chat", (username, message) => {
     if (args[0] === "добудь" && args[1] === "мне" && args[2] === "дерева") {
         const amount = parseInt(args[3]); // Преобразование строки в число
         if (isNaN(amount)) {
-            console.log("⚠️ Неверный формат команды. Укажите количество дерева после команды.");
+            console.log("Неверный формат команды. Укажите количество дерева после команды.");
             return;
         }
 
