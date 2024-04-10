@@ -5,26 +5,38 @@ const minecraftData = require('minecraft-data');
 const bot = mineflayer.createBot({
     host: 'localhost',
     username: 'inokenti_lesorub',
-    port:55111
+    port: 53355
 });
 bot.loadPlugin(require('mineflayer-collectblock').plugin)
 
 let collectedWood = 0;
 
+function countOakLogs(bot) {
+    var oakLogsCount = 0;
+    var items = bot.inventory.items();
+
+    for (var i = 0; i < items.length; i++) {
+        if (items[i].name === 'oak_log') {
+            oakLogsCount += items[i].count;
+        }
+    }
+
+    return oakLogsCount;
+}
 async function collectoak(amount) {
     const oakLogId = mcData.blocksByName.oak_log.id;
     const block = bot.findBlock({
         matching: oakLogId,
-        maxDistance: 64
+        maxDistance: 128 // Увеличиваем максимальное расстояние поиска
     })
 
-    if (block && block.type === oakLogId) {
+    if (block) {
         try {
             await bot.collectBlock.collect(block);
             collectedWood++; // Увеличиваем счетчик добытых блоков
 
             // Проверка, достигнуто ли желаемое количество
-            if (collectedWood >= amount) {
+            if (countOakLogs(bot) >= amount) {
                 console.log(`Добыто ${amount} блоков дерева!`);
                 return; // Останавливаем функцию
             }
@@ -33,9 +45,10 @@ async function collectoak(amount) {
         } catch (err) {
             console.log(err);
         }
+    } else {
+        console.log("Блок дуба не найден в радиусе 128 блоков.");
     }
 }
-
 bot.once('spawn', () => {
     mcData = require('minecraft-data')(bot.version)
 })
