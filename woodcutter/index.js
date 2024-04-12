@@ -43,6 +43,9 @@ async function collectoak(amount) {
 
             collectoak(amount); // Продолжаем добычу
         } catch (err) {
+            if (countOakLogs(bot) <= amount){
+                collectoak()
+            }
             console.log(err);
         }
     } else {
