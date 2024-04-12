@@ -5,29 +5,29 @@ const minecraftData = require('minecraft-data');
 const bot = mineflayer.createBot({
     host: 'localhost',
     username: 'inokenti_lesorub',
-    port: 59805
+    port: 55208
 });
 bot.loadPlugin(require('mineflayer-collectblock').plugin)
 
 let collectedWood = 0;
 
-function countLogs(bot) {
-    var logsCount = 0;
+function countOakLogs(bot) {
+    var oakLogsCount = 0;
     var items = bot.inventory.items();
-    var logTypes = ['oak_log', 'spruce_log', 'birch_log', 'jungle_log', 'acacia_log', 'dark_oak_log'];
 
     for (var i = 0; i < items.length; i++) {
-        if (logTypes.includes(items[i].name)) {
-            logsCount += items[i].count;
+        if (items[i].name === 'oak_log') {
+            oakLogsCount += items[i].count;
         }
     }
-    return logsCount;
+    return oakLogsCount;
 }
+async function collectoak(amount) {
+    const oakLogId = mcData.blocksByName.oak_log.id;
 
-async function collectLogs(amount) {
-    const logIds = logTypes.map(type => mcData.blocksByName[type].id);
+    const array = [oakLogId]
     const block = bot.findBlock({
-        matching: logIds,
+        matching: array,
         maxDistance: 128 // Увеличиваем максимальное расстояние поиска
     })
 
@@ -35,26 +35,26 @@ async function collectLogs(amount) {
         try {
             await bot.collectBlock.collect(block);
 
-            if (countLogs(bot) >= amount) {
+            if (countOakLogs(bot) >= amount) {
                 console.log(`Добыто ${amount} блоков дерева!`);
                 return; // Останавливаем функцию
             }
 
-            collectLogs(amount);
+            collectoak(amount);
         } catch (err) {
-            if (countLogs(bot) <= amount){
-                collectLogs(amount)
+            if (countOakLogs(bot) <= amount){
+                collectoak(amount)
             }
             console.log(err);
         }
     } else {
-        console.log("Блоки дерева не найдены в радиусе 128 блоков.");
+        console.log("Блок дуба не найден в радиусе 128 блоков.");
     }
 }
-
 bot.once('spawn', () => {
     mcData = require('minecraft-data')(bot.version)
 })
+
 
 bot.on("chat", (username, message) => {
     const args = message.split(' ');
@@ -66,6 +66,6 @@ bot.on("chat", (username, message) => {
         }
 
         collectedWood = 0;
-        collectLogs(amount);
+        collectoak(amount);
     }
 });
