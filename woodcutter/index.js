@@ -25,14 +25,15 @@ function countOakLogs(bot) {
 }
 async function collectoak(amount) {
     const oakLogId = mcData.blocksByName.oak_log.id;
+    const array = [oakLogId]
     const block = bot.findBlock({
-        matching: oakLogId,
+        matching: array,
         maxDistance: 128 // Увеличиваем максимальное расстояние поиска
     })
 
     if (block) {
         try {
-            await bot.collectBlock.collect(block);
+            await bot.collectBlock.collect(array);
 
             if (countOakLogs(bot) >= amount) {
                 console.log(`Добыто ${amount} блоков дерева!`);
