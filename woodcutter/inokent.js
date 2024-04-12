@@ -1,3 +1,16 @@
+const mineflayer = require('mineflayer');
+const collectBlock = require('mineflayer-collectblock').plugin;
+const minecraftData = require('minecraft-data');
+
+const bot = mineflayer.createBot({
+    host: 'localhost',
+    username: 'inokenti_lesorub',
+    port: 55208
+});
+bot.loadPlugin(require('mineflayer-collectblock').plugin)
+
+let collectedWood = 0;
+
 function countLogs(bot) {
     var logsCount = 0;
     var items = bot.inventory.items();
@@ -49,6 +62,7 @@ bot.on("chat", (username, message) => {
             console.log("Неверный формат команды. Укажите количество дерева после команды.");
             return;
         }
+
         collectedWood = 0;
         collectLogs(amount);
     }
