@@ -49,7 +49,6 @@ bot.on("chat", (username, message) => {
             console.log("Неверный формат команды. Укажите количество дерева после команды.");
             return;
         }
-
         collectedWood = 0;
         collectLogs(amount);
     }
