@@ -5,7 +5,7 @@ const minecraftData = require('minecraft-data');
 const bot = mineflayer.createBot({
     host: 'localhost',
     username: 'inokenti_lesorub',
-    port: 55208
+    port: 59805
 });
 bot.loadPlugin(require('mineflayer-collectblock').plugin)
 
