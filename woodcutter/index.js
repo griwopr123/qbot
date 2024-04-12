@@ -5,7 +5,7 @@ const minecraftData = require('minecraft-data');
 const bot = mineflayer.createBot({
     host: 'localhost',
     username: 'inokenti_lesorub',
-    port: 53355
+    port: 55208
 });
 bot.loadPlugin(require('mineflayer-collectblock').plugin)
 
@@ -33,7 +33,6 @@ async function collectoak(amount) {
     if (block) {
         try {
             await bot.collectBlock.collect(block);
-            collectedWood++;
 
             if (countOakLogs(bot) >= amount) {
                 console.log(`Добыто ${amount} блоков дерева!`);
@@ -43,7 +42,7 @@ async function collectoak(amount) {
             collectoak(amount);
         } catch (err) {
             if (countOakLogs(bot) <= amount){
-                collectoak()
+                collectoak(amount)
             }
             console.log(err);
         }
@@ -65,7 +64,7 @@ bot.on("chat", (username, message) => {
             return;
         }
 
-        collectedWood = 0; // Сброс счетчика
-        collectoak(amount); // Запуск функции добычи
+        collectedWood = 0;
+        collectoak(amount);
     }
 });
