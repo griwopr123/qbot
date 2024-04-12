@@ -33,7 +33,7 @@ async function collectoak(amount) {
 
     if (block) {
         try {
-            await bot.collectBlock.collect(array);
+            await bot.collectBlock.collect(block);
 
             if (countOakLogs(bot) >= amount) {
                 console.log(`Добыто ${amount} блоков дерева!`);
