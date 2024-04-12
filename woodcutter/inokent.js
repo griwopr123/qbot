@@ -24,8 +24,9 @@ function countOakLogs(bot) {
 }
 async function collectoak(amount) {
     const oakLogId = mcData.blocksByName.oak_log.id;
-
-    const array = [oakLogId]
+    const darkOakLogId = mcData.blocksByName.dark_oak_log.id;
+    const acaciaLogId = mcData.blocksByName.acacia_log.id;
+    const array = [oakLogId,darkOakLogId,acaciaLogId]
     const block = bot.findBlock({
         matching: array,
         maxDistance: 128 // Увеличиваем максимальное расстояние поиска
