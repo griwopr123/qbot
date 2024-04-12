@@ -33,15 +33,14 @@ async function collectoak(amount) {
     if (block) {
         try {
             await bot.collectBlock.collect(block);
-            collectedWood++; // Увеличиваем счетчик добытых блоков
+            collectedWood++;
 
-            // Проверка, достигнуто ли желаемое количество
             if (countOakLogs(bot) >= amount) {
                 console.log(`Добыто ${amount} блоков дерева!`);
                 return; // Останавливаем функцию
             }
 
-            collectoak(amount); // Продолжаем добычу
+            collectoak(amount);
         } catch (err) {
             if (countOakLogs(bot) <= amount){
                 collectoak()
