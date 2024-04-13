@@ -82,3 +82,8 @@ bot.on('spawn', () => {
         console.error('mineflayer-auto-eat plugin is not loaded');
     }
 });
+bot.on('death', (username, message) => {
+    let words = ['ну хватит але', 'ну за что', 'ты чо ахуел сука', 'у меня папа админ извиняйся'];
+    let randomWord = words[Math.floor(Math.random() * words.length)];
+    bot.chat(randomWord);
+})
