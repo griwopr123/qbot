@@ -5,7 +5,7 @@ const minecraftData = require('minecraft-data');
 const bot = mineflayer.createBot({
     host: 'localhost',
     username: 'inokenti_lesorub',
-    port: 59805
+    port: 61815
 });
 bot.loadPlugin(require('mineflayer-collectblock').plugin)
 
@@ -29,7 +29,7 @@ async function collectoak(amount) {
     const array = [oakLogId,darkOakLogId,acaciaLogId]
     const block = bot.findBlock({
         matching: array,
-        maxDistance: 128 // Увеличиваем максимальное расстояние поиска
+        maxDistance: 10 // Увеличиваем максимальное расстояние поиска
     })
 
     if (block) {
@@ -60,7 +60,7 @@ bot.once('spawn', () => {
 bot.on("chat", (username, message) => {
     const args = message.split(' ');
     if (args[0] === "добудь" && args[1] === "мне" && args[2] === "дерева") {
-        const amount = parseInt(args[3]); // Преобразование строки в число
+        const amount = parseInt(args[3]);
         if (isNaN(amount)) {
             console.log("Неверный формат команды. Укажите количество дерева после команды.");
             return;
