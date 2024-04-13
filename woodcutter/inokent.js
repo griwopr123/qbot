@@ -1,6 +1,7 @@
 const mineflayer = require('mineflayer');
 const collectBlock = require('mineflayer-collectblock').plugin;
 const minecraftData = require('minecraft-data');
+const {plugin: autoeat} = require("mineflayer-auto-eat");
 
 const bot = mineflayer.createBot({
     host: 'localhost',
@@ -8,7 +9,7 @@ const bot = mineflayer.createBot({
     port: 61815
 });
 bot.loadPlugin(require('mineflayer-collectblock').plugin)
-
+bot.loadPlugin(autoeat);
 let collectedWood = 0;
 
 function countOakLogs(bot) {
@@ -68,5 +69,16 @@ bot.on("chat", (username, message) => {
 
         collectedWood = 0;
         collectoak(amount);
+    }
+});
+bot.on('spawn', () => {
+    if (bot.autoEat) {
+        bot.autoEat.options = {
+            priority: 'foodPoints',
+            startAt: 14,
+            bannedFood: [],
+        };
+    } else {
+        console.error('mineflayer-auto-eat plugin is not loaded');
     }
 });
