@@ -29,7 +29,7 @@ async function collectoak(amount) {
     const array = [oakLogId,darkOakLogId,acaciaLogId]
     const block = bot.findBlock({
         matching: array,
-        maxDistance: 10 // Увеличиваем максимальное расстояние поиска
+        maxDistance: 128 // Увеличиваем максимальное расстояние поиска
     })
 
     if (block) {
