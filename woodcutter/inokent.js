@@ -49,7 +49,7 @@ async function collectoak(amount) {
             console.log(err);
         }
     } else {
-        console.log("Блок дуба не найден в радиусе 128 блоков.");
+        console.log("Блок дерева не найден");
     }
 }
 bot.once('spawn', () => {
