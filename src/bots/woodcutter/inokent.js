@@ -118,12 +118,10 @@ bot.on('move', () => {
     };
     if (botPosition.x !== newPosition.x || botPosition.y !== newPosition.y || botPosition.z !== newPosition.z) {
         botPosition = newPosition;
-        console.log(botPosition);
-    }
-});
-
-bot.on("chat", (username, message) => {
-    if(message === 'корды'){
-        console.log(botPosition);
+        if (ipcMain) {
+            ipcMain.send('updateCoordinates', botPosition);
+        } else {
+            console.warn("Приложение Electron не готово принимать данные. Подождите...");
+        }
     }
 });

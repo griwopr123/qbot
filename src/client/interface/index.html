@@ -1,3 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Координаты бота</title>
+</head>
 <body>
-  <h1>bot </h1>
+<h1>Координаты бота</h1>
+<p>X: <span id="xCoordinate"></span></p>
+<p>Y: <span id="yCoordinate"></span></p>
+<p>Z: <span id="zCoordinate"></span></p>
+<script>
+  const ipcRenderer = window.require('electron').ipcRenderer; // Access ipcRenderer directly
+
+  ipcRenderer.on('updateCoordinates', (event, args) => {
+    document.getElementById('xCoordinate').innerText = args.x;
+    document.getElementById('yCoordinate').innerText = args.y;
+    document.getElementById('zCoordinate').innerText = args.z;
+  });
+</script>
 </body>
+</html>
