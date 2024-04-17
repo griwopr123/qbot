@@ -75,7 +75,7 @@ bot.on('spawn', () => {
     if (bot.autoEat) {
         bot.autoEat.options = {
             priority: 'foodPoints',
-            startAt: 15,
+            startAt: 14,
             bannedFood: [],
         };
     } else {
