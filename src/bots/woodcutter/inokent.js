@@ -1,4 +1,5 @@
 const mineflayer = require('mineflayer');
+const { ipcMain } = require('electron');
 const collectBlock = require('mineflayer-collectblock').plugin;
 const minecraftData = require('minecraft-data');
 const {plugin: autoeat} = require("mineflayer-auto-eat");
@@ -117,7 +118,8 @@ bot.on('move', () => {
     };
     if (botPosition.x !== newPosition.x || botPosition.y !== newPosition.y || botPosition.z !== newPosition.z) {
         botPosition = newPosition;
-        console.log(botPosition);
+        // Отправляем новые координаты в рендерер
+        mainWindow.webContents.send('botPosition', botPosition);
     }
 });
 
