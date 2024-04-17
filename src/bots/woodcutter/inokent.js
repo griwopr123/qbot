@@ -118,8 +118,10 @@ bot.on('move', () => {
     };
     if (botPosition.x !== newPosition.x || botPosition.y !== newPosition.y || botPosition.z !== newPosition.z) {
         botPosition = newPosition;
-        // Отправляем новые координаты в рендерер
-        mainWindow.webContents.send('botPosition', botPosition);
+        // Проверяем, определено ли mainWindow перед отправкой сообщения
+        if (global.mainWindow && global.mainWindow.webContents) {
+            global.mainWindow.webContents.send('botPosition', botPosition);
+        }
     }
 });
 
