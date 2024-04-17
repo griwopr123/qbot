@@ -7,7 +7,7 @@ const { Bot, Vec3 } = require('mineflayer');
 const bot = mineflayer.createBot({
     host: 'localhost',
     username: 'inokenti_lesorub',
-    port: 61814
+    port: 61098
 });
 bot.loadPlugin(require('mineflayer-collectblock').plugin)
 bot.loadPlugin(autoeat);
@@ -54,6 +54,7 @@ async function collectoak(amount) {
         console.log("Блок дерева не найден");
     }
 }
+
 bot.once('spawn', () => {
     mcData = require('minecraft-data')(bot.version)
 })
@@ -70,6 +71,14 @@ bot.on("chat", (username, message) => {
 
         collectedWood = 0;
         collectoak(amount);
+    }
+    if(message === 'корды'){
+        let botPosition = bot.entity.position;
+        console.log(botPosition);
+        if(botPosition !== bot.entity.position){
+            botPosition = bot.entity.position
+            console.log(botPosition);
+        }
     }
 });
 bot.on('spawn', () => {
@@ -88,17 +97,4 @@ bot.on('death', (username, message) => {
     let randomWord = words[Math.floor(Math.random() * words.length)];
     bot.chat(randomWord);
 })
-let lastCoords = bot.entity.position; // Последние сохраненные координаты
 
-bot.on('spawn', () => {
-    console.log(`Спаун: ${bot.entity.position}`);
-    lastCoords = bot.entity.position;
-});
-
-bot.on('move', () => {
-    const newCoords = bot.entity.position;
-    if (newCoords.x !== lastCoords.x || newCoords.y !== lastCoords.y || newCoords.z !== lastCoords.z) {
-        console.log(`Перемещение: ${newCoords}`);
-        lastCoords = newCoords;
-    }
-});
