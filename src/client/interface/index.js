@@ -6,6 +6,7 @@ const createWindow = () => {
         height: 550,
     })
     win.loadFile('src/client/interface/index.html');
+    global.mainWindow = win;
 }
 
 app.whenReady().then(() => createWindow())
