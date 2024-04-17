@@ -101,19 +101,28 @@ bot.on('death', (username, message) => {
     let randomWord = words[Math.floor(Math.random() * words.length)];
     bot.chat(randomWord);
 })
+bot.on('login', () => {
+    botPosition = {
+        x: Math.floor(bot.entity.position.x),
+        y: Math.floor(bot.entity.position.y),
+        z: Math.floor(bot.entity.position.z)
+    };
+});
+
+bot.on('move', () => {
+    let newPosition = {
+        x: Math.floor(bot.entity.position.x),
+        y: Math.floor(bot.entity.position.y),
+        z: Math.floor(bot.entity.position.z)
+    };
+    if (botPosition.x !== newPosition.x || botPosition.y !== newPosition.y || botPosition.z !== newPosition.z) {
+        botPosition = newPosition;
+        console.log(botPosition);
+    }
+});
+
 bot.on("chat", (username, message) => {
     if(message === 'корды'){
-        let botPosition = bot.entity.position;
-        console.log(botPosition);
-        if(botPosition !== bot.entity.position){
-            botPosition = bot.entity.position
-            console.log(botPosition);
-        }
-    }
-})
-bot.on('move', () => {
-    if (botPosition !== bot.entity.position ) {
-        botPosition = bot.entity.position;
         console.log(botPosition);
     }
 });
