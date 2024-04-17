@@ -54,9 +54,16 @@ async function collectoak(amount) {
         console.log("Блок дерева не найден");
     }
 }
+let botPosition;
+bot.on('spawn', () => {
+
+});
 bot.once('spawn', () => {
+
     mcData = require('minecraft-data')(bot.version)
 })
+
+
 bot.on("chat", (username, message) => {
     const args = message.split(' ');
     if (args[0] === "добудь" && args[1] === "мне" && args[2] === "дерева") {
@@ -68,6 +75,14 @@ bot.on("chat", (username, message) => {
 
         collectedWood = 0;
         collectoak(amount);
+    }
+    if(message === 'корды'){
+        let botPosition = bot.entity.position;
+        console.log(botPosition);
+        if(botPosition !== bot.entity.position){
+            botPosition = bot.entity.position
+            console.log(botPosition);
+        }
     }
 });
 bot.on('spawn', () => {
@@ -86,21 +101,19 @@ bot.on('death', (username, message) => {
     let randomWord = words[Math.floor(Math.random() * words.length)];
     bot.chat(randomWord);
 })
-let botPosition;
-
-bot.on('spawn', () => {
-    botPosition = {x: bot.entity.position.x, y: bot.entity.position.y, z: bot.entity.position.z};
-});
-
-bot.on('move', () => {
-    if (botPosition.x !== bot.entity.position.x || botPosition.y !== bot.entity.position.y || botPosition.z !== bot.entity.position.z) {
-        botPosition = {x: bot.entity.position.x, y: bot.entity.position.y, z: bot.entity.position.z};
-        console.log(botPosition);
-    }
-});
-
 bot.on("chat", (username, message) => {
     if(message === 'корды'){
+        let botPosition = bot.entity.position;
+        console.log(botPosition);
+        if(botPosition !== bot.entity.position){
+            botPosition = bot.entity.position
+            console.log(botPosition);
+        }
+    }
+})
+bot.on('move', () => {
+    if (botPosition !== bot.entity.position ) {
+        botPosition = bot.entity.position;
         console.log(botPosition);
     }
 });
