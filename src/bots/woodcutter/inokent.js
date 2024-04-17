@@ -2,6 +2,7 @@ const mineflayer = require('mineflayer');
 const collectBlock = require('mineflayer-collectblock').plugin;
 const minecraftData = require('minecraft-data');
 const {plugin: autoeat} = require("mineflayer-auto-eat");
+const { Bot, Vec3 } = require('mineflayer');
 
 const bot = mineflayer.createBot({
     host: 'localhost',
@@ -87,3 +88,17 @@ bot.on('death', (username, message) => {
     let randomWord = words[Math.floor(Math.random() * words.length)];
     bot.chat(randomWord);
 })
+let lastCoords = bot.entity.position; // Последние сохраненные координаты
+
+bot.on('spawn', () => {
+    console.log(`Спаун: ${bot.entity.position}`);
+    lastCoords = bot.entity.position;
+});
+
+bot.on('move', () => {
+    const newCoords = bot.entity.position;
+    if (newCoords.x !== lastCoords.x || newCoords.y !== lastCoords.y || newCoords.z !== lastCoords.z) {
+        console.log(`Перемещение: ${newCoords}`);
+        lastCoords = newCoords;
+    }
+});
