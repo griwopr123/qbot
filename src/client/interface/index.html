@@ -10,13 +10,15 @@
 <p>Y: <span id="yCoordinate"></span></p>
 <p>Z: <span id="zCoordinate"></span></p>
 <script>
-  const ipcRenderer = window.require('electron').ipcRenderer; // Access ipcRenderer directly
+  if (typeof process !== 'undefined' && process.versions !== 'undefined' && process.versions.electron) {
+    const { ipcRenderer } = require('electron'); // Include require only in Electron environment
 
-  ipcRenderer.on('updateCoordinates', (event, args) => {
-    document.getElementById('xCoordinate').innerText = args.x;
-    document.getElementById('yCoordinate').innerText = args.y;
-    document.getElementById('zCoordinate').innerText = args.z;
-  });
+    ipcRenderer.on('updateCoordinates', (event, args) => {
+      document.getElementById('xCoordinate').innerText = args.x;
+      document.getElementById('yCoordinate').innerText = args.y;
+      document.getElementById('zCoordinate').innerText = args.z;
+    })
+  }
 </script>
 </body>
 </html>
