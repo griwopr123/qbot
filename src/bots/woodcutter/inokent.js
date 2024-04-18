@@ -6,8 +6,6 @@ const {plugin: autoeat} = require("mineflayer-auto-eat");
 const { Bot, Vec3 } = require('mineflayer');
 const WebSocket = require('ws');
 
-const ws = new WebSocket('ws://localhost:8080');
-
 const bot = mineflayer.createBot({
     host: 'localhost',
     username: 'inokenti_lesorub',
@@ -105,6 +103,8 @@ bot.on('death', (username, message) => {
     let randomWord = words[Math.floor(Math.random() * words.length)];
     bot.chat(randomWord);
 })
+
+
 bot.on('login', () => {
     botPosition = {
         x: Math.floor(bot.entity.position.x),
@@ -112,6 +112,36 @@ bot.on('login', () => {
         z: Math.floor(bot.entity.position.z)
     };
 });
+let ws; // Объявляем переменную ws
+
+function connect() {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        return; // Если соединение уже открыто, не делаем ничего
+    }
+
+    ws = new WebSocket('ws://localhost:8080'); // Создаем новое соединение WebSocket
+
+    ws.on('open', () => {
+        console.log('Соединение установлено');
+    });
+
+    ws.on('message', (data) => {
+        // Обработка сообщений
+    });
+
+    ws.on('close', () => {
+        console.log('Соединение потеряно, пытаемся переподключиться');
+        setTimeout(connect, 3); // Попытка переподключения через 5 секунд
+    });
+
+    ws.on('error', (err) => {
+        console.log('Ошибка соединения:', err);
+        console.log('Пытаемся переподключиться');
+        setTimeout(connect, 3); // Попытка переподключения через 10 секунд
+    });
+}
+connect(); // Вызываем функцию подключения
+
 bot.on('move', () => {
     let newPosition = {
         x: Math.floor(bot.entity.position.x),
