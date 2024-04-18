@@ -3,17 +3,6 @@
 <p id="coords"></p>
 
 <script>
-  let botPosition = null; // Initialize outside the function
-
-  const socket = new WebSocket('ws://localhost:8080');
-
-  socket.onmessage = function(event) {
-    const newPosition = JSON.parse(event.data);
-    updateCoords(newPosition); // Call the update function
-  };
-
-  function updateCoords(position) {
-    document.getElementById('coords').textContent = `x: ${position.x}, y: ${position.y}, z: ${position.z}`;
-  }
+  window.connectWebSocket();
 </script>
 </body>

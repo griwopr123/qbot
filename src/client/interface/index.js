@@ -5,10 +5,6 @@ const createWindow = () => {
     const win = new BrowserWindow({
         width: 900,
         height: 550,
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-        }
     });
     win.loadFile('src/client/interface/index.html');
 };
