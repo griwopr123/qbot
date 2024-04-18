@@ -4,6 +4,9 @@ const collectBlock = require('mineflayer-collectblock').plugin;
 const minecraftData = require('minecraft-data');
 const {plugin: autoeat} = require("mineflayer-auto-eat");
 const { Bot, Vec3 } = require('mineflayer');
+const WebSocket = require('ws');
+
+const ws = new WebSocket('ws://localhost:8080');
 
 const bot = mineflayer.createBot({
     host: 'localhost',
@@ -118,6 +121,6 @@ bot.on('move', () => {
     };
     if (botPosition.x !== newPosition.x || botPosition.y !== newPosition.y || botPosition.z !== newPosition.z) {
         botPosition = newPosition;
-        console.log(botPosition)
+        ws.send(JSON.stringify(botPosition));
     }
 });
