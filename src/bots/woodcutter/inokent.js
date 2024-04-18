@@ -11,7 +11,7 @@ const ws = new WebSocket('ws://localhost:8080');
 const bot = mineflayer.createBot({
     host: 'localhost',
     username: 'inokenti_lesorub',
-    port: 61098
+    port: 56623
 });
 bot.loadPlugin(require('mineflayer-collectblock').plugin)
 bot.loadPlugin(autoeat);
@@ -112,7 +112,6 @@ bot.on('login', () => {
         z: Math.floor(bot.entity.position.z)
     };
 });
-
 bot.on('move', () => {
     let newPosition = {
         x: Math.floor(bot.entity.position.x),
@@ -121,6 +120,7 @@ bot.on('move', () => {
     };
     if (botPosition.x !== newPosition.x || botPosition.y !== newPosition.y || botPosition.z !== newPosition.z) {
         botPosition = newPosition;
+        console.log(botPosition);
         ws.send(JSON.stringify(botPosition));
     }
 });

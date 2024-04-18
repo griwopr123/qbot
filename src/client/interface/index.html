@@ -1,14 +1,19 @@
-<!-- В файле index.html -->
 <body>
 <h1>Координаты бота:</h1>
 <p id="coords"></p>
 
 <script>
+  let botPosition = null; // Initialize outside the function
+
   const socket = new WebSocket('ws://localhost:8080');
 
   socket.onmessage = function(event) {
-    const botPosition = JSON.parse(event.data);
-    document.getElementById('coords').textContent = `x: ${botPosition.x}, y: ${botPosition.y}, z: ${botPosition.z}`;
+    const newPosition = JSON.parse(event.data);
+    updateCoords(newPosition); // Call the update function
   };
+
+  function updateCoords(position) {
+    document.getElementById('coords').textContent = `x: ${position.x}, y: ${position.y}, z: ${position.z}`;
+  }
 </script>
 </body>
