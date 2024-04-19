@@ -9,7 +9,7 @@ const WebSocket = require('ws');
 const bot = mineflayer.createBot({
     host: 'localhost',
     username: 'inokenti_lesorub',
-    port: 56623
+    port: 55995
 });
 bot.loadPlugin(require('mineflayer-collectblock').plugin)
 bot.loadPlugin(autoeat);

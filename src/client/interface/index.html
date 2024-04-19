@@ -1,20 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Example</title>
+</head>
 <body>
-<h1>Координаты бота:</h1>
-<p id="coords"></p>
+<div id="messageContainer"></div>
 
 <script>
-    const WebSocket = require('ws');
-    const wss = new WebSocket.Server({ port: 8080 });
+    // Создание подключения к веб-сокету
     const socket = new WebSocket('ws://localhost:8080');
 
-    wss.on('connection', ws => {
-        ws.on('message', message => {
-            console.log(`Received message: ${message}`);
-        });
-    });
+    // Обработчик события открытия соединения
+    socket.onopen = function(event) {
+        console.log('Соединение установлено');
+    };
+
+    // Обработчик события получения сообщения
     socket.onmessage = function(event) {
-        const botPosition = JSON.parse(event.data);
-        document.getElementById('coords').textContent = `x: ${botPosition.x}, y: ${botPosition.y}, z: ${botPosition.z}`;
+        const message = event.data;
+        // Добавление полученного сообщения в контейнер на веб-странице
+        const messageContainer = document.getElementById('messageContainer');
+        messageContainer.innerHTML += `<p>${message}</p>`;
+    };
+
+    // Обработчик события закрытия соединения
+    socket.onclose = function(event) {
+        console.log('Соединение закрыто');
+    };
+
+    // Обработчик события ошибки
+    socket.onerror = function(error) {
+        console.error('Ошибка веб-сокета: ', error);
     };
 </script>
 </body>
+</html>
