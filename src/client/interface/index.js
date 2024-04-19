@@ -1,14 +1,11 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const WebSocket = require('ws');
+const { ipcRenderer } = require('electron');
 
 const createWindow = () => {
-    const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences: {
-            nodeIntegration: true,
-            preload: path.join(__dirname, 'src', 'client', 'interface', 'preload.js') // Изменяем путь к preload.js
-        }
+    const win = new BrowserWindow({
+        width: 900,
+        height: 550,
     });
     win.loadFile('src/client/interface/index.html');
 };
