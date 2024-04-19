@@ -1,9 +1,8 @@
-// preload.js
-window.connectWebSocket = function() {
-    const socket = new WebSocket('ws://localhost:8080');
+const { ipcRenderer } = require('electron');
 
-    socket.onmessage = function(event) {
-        const botPosition = JSON.parse(event.data);
-        document.getElementById('coords').textContent = `x: ${botPosition.x}, y: ${botPosition.y}, z: ${botPosition.z}`;
-    };
-};
+window.addEventListener('DOMContentLoaded', () => {
+    ipcRenderer.on('message', (event, message) => {
+        const messagesDiv = document.getElementById('messages');
+        messagesDiv.innerHTML += `<p>${message}</p>`;
+    });
+});

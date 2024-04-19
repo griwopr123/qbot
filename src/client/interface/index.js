@@ -1,10 +1,14 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const WebSocket = require('ws');
 
 const createWindow = () => {
-    const win = new BrowserWindow({
-        width: 900,
-        height: 550,
+    const mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'src', 'client', 'interface', 'preload.js') // Изменяем путь к preload.js
+        }
     });
     win.loadFile('src/client/interface/index.html');
 };
@@ -15,6 +19,8 @@ wss.on('connection', ws => {
         console.log(`Received message: ${message}`);
     });
 });
-
+ipcMain.on('message-from-renderer', (event, arg) => {
+    console.log(arg); // Выводим в консоль сообщение из рендерера
+});
 app.whenReady().then(() => createWindow())
 app.on('window-all-closed', () => app.quit)
