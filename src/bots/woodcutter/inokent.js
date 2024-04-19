@@ -116,10 +116,10 @@ let ws; // Объявляем переменную ws
 
 function connect() {
     if (ws && ws.readyState === WebSocket.OPEN) {
-        return; // Если соединение уже открыто, не делаем ничего
+        return;
     }
 
-    ws = new WebSocket('ws://localhost:8080'); // Создаем новое соединение WebSocket
+    ws = new WebSocket('ws://localhost:8080');
 
     ws.on('open', () => {
         console.log('Соединение установлено');
